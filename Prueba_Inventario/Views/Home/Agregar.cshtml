@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Agregar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Agregar</h2>
+
+<div id="add" class="tabcontent">
+    <div class="row">
+        <div class="col-lg-6 form-inline">
+            <div class="form-outline me-3" style="width: 14rem">
+                <input type="text" id="nombre" class="form-control" maxlength="60" />
+                <label class="form-label" for="form1">Nombre Producto</label>
+            </div>
+            <button type="button" class="btn btn-success" onclick="AddProduct();">Añadir</button>
+            @Html.ActionLink("Ver Lista", "Index", "Home", new { @class = "btn btn-warning" })
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function AddProduct() {
+        var nombre = $("#nombre").val();
+
+        if (nombre.length > 0) {
+            $.ajax({
+                url: "/Home/ActionAddProduct/",
+                data: { "nombre": nombre },
+                type: "POST",
+                success: function (json) {
+                    if (json.success) {
+                        alert('Producto registrado correctamente!');
+                        $("#nombre").val("");
+                    }
+                }
+            });
+        } else {
+            alert('Ingresar un nombre.');
+            $("#nombre").focus();
+        }
+    }
+</script>

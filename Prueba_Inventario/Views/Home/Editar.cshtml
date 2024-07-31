@@ -1,0 +1,53 @@
+﻿@using BO
+@model BO.productModel
+@{
+    ViewBag.Title = "Editar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar</h2>
+
+<div id="upd" class="tabcontent">
+    <h3>Actualizacion de Productos</h3>
+    <div class="row">
+        <div class="col-lg-6 form-inline">
+
+            <div class="form-outline me-3" style="width: 14rem">
+                <input type="hidden" id="id_product" value="@Model.id_producto">
+                <input type="text" id="nombre_ant" class="form-control" value="@Model.nombre_producto" disabled />
+                <label class="form-label" for="form1">Nombre Actual</label>
+                <br />
+                <input type="text" id="nombre" maxlength="60" class="form-control" value="" />
+                <label class="form-label" for="form1">Nuevo nombre de Producto</label>
+            </div>
+            <button type="button" class="btn btn-success" onclick="EditProduct();">Actualizar</button>
+            @Html.ActionLink("Ver Lista", "Index", "Home", new { @class = "btn btn-warning" })
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function EditProduct() {
+        var nombre = $("#nombre").val();
+        var id = $("#id_product").val();
+        if (nombre.length > 0) {
+            $.ajax({
+                url: "/Home/ActionUpdateProduct/",
+                data: { "id": id, "nombre": nombre },
+                type: "POST",
+                success: function (json) {
+                    if (json.success) {
+                        alert('Producto actualizado correctamente!');
+                        $("#nombre_ant").val(nombre);
+                        $("#nombre").val("");
+                    }
+                }
+            });
+        } else {
+            alert('Ingresar un nombre.');
+            $("#nombre").focus();
+        }
+    }
+
+</script>

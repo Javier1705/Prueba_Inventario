@@ -1,0 +1,52 @@
+﻿@model List<BO.productModel>
+@{
+    ViewBag.Title = "Movimientos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Agregar Movimientos</h2>
+
+<label for="id_producto">Elige un Producto:</label>
+
+<select class="form-control" name="id" id="id_producto">
+    @foreach (var item in Model)
+    {
+        <option value="@item.id_producto">@item.nombre_producto</option>
+    }
+</select>
+<br />
+<label for="cantidad">Ingrese cantidad:</label>
+<input class="form-control" type="number" id="cantidad" />
+<br />
+<button class="btn btn-success" onclick="AddMovement();">Registrar</button>
+@Html.ActionLink("Inicio", "Index", "Home", new { @class = "btn btn-warning" })
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/Scripts/datatables.js")
+@Scripts.Render("~/bundles/bootstrap")
+<script type="text/javascript">
+
+    function AddMovement() {
+
+        var id = $('#id_producto').find('option:selected').val();
+        var cantidad = $("#cantidad").val();
+        
+        if (cantidad.length > 0) {
+            $.ajax({
+                url: "/Home/ActionAddMovements/",
+                data: { "id_producto": id, "cantidad": cantidad },
+                type: "POST",
+                success: function (json) {
+                    if (json.success) {
+                        alert('Movimiento registrado correctamente!');
+                        $("#cantidad").val(0);
+                    }
+                }
+            });
+        } else {
+            alert('Ingresar una cantidad.');
+            $("#cantidad").focus();
+        }
+    }
+
+</script>
